@@ -1,0 +1,56 @@
+name: tenantguard-lab-lab
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${DB_NAME:?DB_NAME is required}
+      POSTGRES_USER: ${DB_USER:?DB_USER is required}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+    volumes:
+      - lab_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    networks:
+      - lab_net
+
+  api:
+    image: tenantguard-lab:local
+    build:
+      context: .
+    environment:
+      SPRING_PROFILES_ACTIVE: lab
+      DB_URL: jdbc:postgresql://db:5432/${DB_NAME:?DB_NAME is required}
+      DB_USER: ${DB_USER:?DB_USER is required}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      LAB_PASSWORD_ALICE: ${LAB_PASSWORD_ALICE:?LAB_PASSWORD_ALICE is required}
+      LAB_PASSWORD_BOB: ${LAB_PASSWORD_BOB:?LAB_PASSWORD_BOB is required}
+      LAB_PASSWORD_CHARLIE: ${LAB_PASSWORD_CHARLIE:?LAB_PASSWORD_CHARLIE is required}
+      LAB_PASSWORD_DAVID: ${LAB_PASSWORD_DAVID:?LAB_PASSWORD_DAVID is required}
+      LAB_PASSWORD_EVE: ${LAB_PASSWORD_EVE:?LAB_PASSWORD_EVE is required}
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - type: bind
+        source: ./keys/private.pem
+        target: /app/keys/private.pem
+        read_only: true
+      - type: bind
+        source: ./keys/public.pem
+        target: /app/keys/public.pem
+        read_only: true
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - lab_net
+
+networks:
+  lab_net:
+
+volumes:
+  lab_postgres_data:

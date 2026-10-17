@@ -1,0 +1,14 @@
+*
+!pom.xml
+!src/
+!src/main/
+!src/main/**
+
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.jks
+**/*.keystore

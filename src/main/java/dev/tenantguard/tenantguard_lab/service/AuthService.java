@@ -1,12 +1,12 @@
 package dev.tenantguard.tenantguard_lab.service;
 
 import dev.tenantguard.tenantguard_lab.entity.User;
+import dev.tenantguard.tenantguard_lab.exception.InvalidCredentialsException;
+import dev.tenantguard.tenantguard_lab.exception.UserAlreadyExistsException;
 import dev.tenantguard.tenantguard_lab.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -22,7 +22,7 @@ public class AuthService {
     @Transactional
     public User register(String username, String password) {
         if (userRepository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException(username + " already registered.");
+            throw new UserAlreadyExistsException(username);
         }
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -33,10 +33,10 @@ public class AuthService {
     }
 
     public User authenticate(String username, String password) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("Invalid credentials."));
+        User user = userRepository.findByUsername(username).orElseThrow(InvalidCredentialsException::new);
 
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
-            throw new IllegalArgumentException("Invalid credentials.");
+            throw new InvalidCredentialsException();
         }
 
         return user;

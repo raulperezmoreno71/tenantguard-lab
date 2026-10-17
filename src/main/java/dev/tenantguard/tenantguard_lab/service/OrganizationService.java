@@ -4,6 +4,7 @@ import dev.tenantguard.tenantguard_lab.entity.Membership;
 import dev.tenantguard.tenantguard_lab.entity.Organization;
 import dev.tenantguard.tenantguard_lab.entity.Role;
 import dev.tenantguard.tenantguard_lab.entity.User;
+import dev.tenantguard.tenantguard_lab.exception.OrganizationAlreadyExistsException;
 import dev.tenantguard.tenantguard_lab.repository.MembershipRepository;
 import dev.tenantguard.tenantguard_lab.repository.OrganizationRepository;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class OrganizationService {
         }
 
         if (organizationRepository.findByName(nameTrim).isPresent()) {
-            throw new IllegalArgumentException(nameTrim + " is already registered");
+            throw new OrganizationAlreadyExistsException();
         }
 
         Organization organization = organizationRepository.save(new Organization(nameTrim));

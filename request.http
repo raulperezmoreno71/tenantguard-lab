@@ -1,7 +1,65 @@
-POST http://localhost:8080/api/organizations
-Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZW5hbnRndWFyZC1sYWIiLCJzdWIiOiIxIiwiZXhwIjoxNzkyMTk1NjExLCJpYXQiOjE3OTIxOTIwMTF9.ukGkmizKzF0iZ3o1w9XCmfQ7qakSGxobx8wdQC7K43Z1YL2yyNB2qflSmfkHFQn7JIQJzIj5Uk33KRzId--9aVKzusfO47wGf6H-JKEYn3IHVwtwF12HrTnbuwPoKHHbs61UPO6E8OPRETvTxdgAPtkqYHIITivvDj0Myl3ZxLFdYh8v0IkQ1ycknKoYKEEN2aEpJxM_kqHy2tKmxZ4PLDsw-b_na67V1LKMkMB51widW8ArLftX6_xnZwzUqaVenQfgPRzi8GSfjUOvQm5a7HJtZSzsOGp3_HTYpDfNLRNokRUUo9lJfF-54Q9LD_L1u-GQVsJxoFz2r1w0JmX7UDeXG5-Lz9L_w8xCHLl3OxPmci6HWxKjCkEZqH07aI6_A6OZR5Nfd-zJg_vQnPnbQUAbGndJkMCN2ftSKGOyC-GRHGsfhh8UD-cffWjyk4-_9-gYXmXhB8nJQ1Ht1WdM97oEJON7EL-I6p-PsMP8Ox2UOesw571WWPY-nlcpGmRc
+### Login
+POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "name": "testOrganization"
+  "username": "testuser1",
+  "password": "password12345"
+}
+
+### Añadir miembro a la membership
+POST http://localhost:8080/api/organizations/2/members
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZW5hbnRndWFyZC1sYWIiLCJzdWIiOiIyIiwiZXhwIjoxNzkyMjQwNDcwLCJpYXQiOjE3OTIyMzY4NzB9.MAL_r9q84VYx3X74gWpmaeFm-BtaPO2I5izoQEqStgrfsmNkZzIFckeMBpqPhXEYkW5l5dZhsR_kq5wx7Weq4ZyFGWiTsdzFKhQBGsX9yO-g5_0FcWAZuzbqxaXMPj-Qrhr7-8_6I2hNat29CgYGiuOQmQ8PxfsNvX_GQCAMc9YXiUA_dCM5MyGCkGzapeqhaE3QgLayhiEX01E-LjlBRtUeuVTDVU0JjVGJpSHSmM0DFwttlpqHVd3YGB3EBgDu4yL-MGr1acIYfAwryK2VTlzhllH7zHuKmu8yLDwgaSVOqfZgPvO8NX_wjszF6F17rDU31E79wTqKQpmTpjzglCwoLKq4AgZep7QlBExn7o_m7AlIRBexzcquPKGVVNV9zSUQh0pz-6IhZ5mQ4tokoPQiqLGBrxRUyenW3HvcJMs9BSXlt0ChwP6T_etRr97SIv7e9YJz7g8Wt63Hui19ZkkeCRmwgz_OvgDRTlZNKoV2h42DaIkmBXP7g0fkqrR8
+Content-Type: application/json
+
+{
+  "username": "attacker",
+  "role": "VIEWER"
+}
+
+### Crear organizacion
+POST http://localhost:8080/api/organizations
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZW5hbnRndWFyZC1sYWIiLCJzdWIiOiIyIiwiZXhwIjoxNzkyMjQwNDcwLCJpYXQiOjE3OTIyMzY4NzB9.MAL_r9q84VYx3X74gWpmaeFm-BtaPO2I5izoQEqStgrfsmNkZzIFckeMBpqPhXEYkW5l5dZhsR_kq5wx7Weq4ZyFGWiTsdzFKhQBGsX9yO-g5_0FcWAZuzbqxaXMPj-Qrhr7-8_6I2hNat29CgYGiuOQmQ8PxfsNvX_GQCAMc9YXiUA_dCM5MyGCkGzapeqhaE3QgLayhiEX01E-LjlBRtUeuVTDVU0JjVGJpSHSmM0DFwttlpqHVd3YGB3EBgDu4yL-MGr1acIYfAwryK2VTlzhllH7zHuKmu8yLDwgaSVOqfZgPvO8NX_wjszF6F17rDU31E79wTqKQpmTpjzglCwoLKq4AgZep7QlBExn7o_m7AlIRBexzcquPKGVVNV9zSUQh0pz-6IhZ5mQ4tokoPQiqLGBrxRUyenW3HvcJMs9BSXlt0ChwP6T_etRr97SIv7e9YJz7g8Wt63Hui19ZkkeCRmwgz_OvgDRTlZNKoV2h42DaIkmBXP7g0fkqrR8
+Content-Type: application/json
+
+{
+  "name": "organizacion1"
+}
+
+### Crear documento
+POST http://localhost:8080/api/organizations/2/documents
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZW5hbnRndWFyZC1sYWIiLCJzdWIiOiIyIiwiZXhwIjoxNzkyMjQwNDcwLCJpYXQiOjE3OTIyMzY4NzB9.MAL_r9q84VYx3X74gWpmaeFm-BtaPO2I5izoQEqStgrfsmNkZzIFckeMBpqPhXEYkW5l5dZhsR_kq5wx7Weq4ZyFGWiTsdzFKhQBGsX9yO-g5_0FcWAZuzbqxaXMPj-Qrhr7-8_6I2hNat29CgYGiuOQmQ8PxfsNvX_GQCAMc9YXiUA_dCM5MyGCkGzapeqhaE3QgLayhiEX01E-LjlBRtUeuVTDVU0JjVGJpSHSmM0DFwttlpqHVd3YGB3EBgDu4yL-MGr1acIYfAwryK2VTlzhllH7zHuKmu8yLDwgaSVOqfZgPvO8NX_wjszF6F17rDU31E79wTqKQpmTpjzglCwoLKq4AgZep7QlBExn7o_m7AlIRBexzcquPKGVVNV9zSUQh0pz-6IhZ5mQ4tokoPQiqLGBrxRUyenW3HvcJMs9BSXlt0ChwP6T_etRr97SIv7e9YJz7g8Wt63Hui19ZkkeCRmwgz_OvgDRTlZNKoV2h42DaIkmBXP7g0fkqrR8
+Content-Type: application/json
+
+{
+  "title": "Prueba de titulo",
+  "content": "Este es un documento de prueba con contenido de prueba"
+}
+
+### Registrar atacante
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "attacker",
+  "password": "password12345"
+}
+
+### Login atacante
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "attacker",
+  "password": "password12345"
+}
+
+### Intento de atacante de crear documento de otra organizacion
+POST http://localhost:8080/api/organizations/2/documents
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZW5hbnRndWFyZC1sYWIiLCJzdWIiOiIzIiwiZXhwIjoxNzkyMjQxMDgwLCJpYXQiOjE3OTIyMzc0ODB9.evVvuoWaOwE-V0wWTQNnrv8QXkE00jWYklEcLiOPom_TwPlnHzYHHxp7xudGVer7HMYLWGaqlf68oTedqDp8S4Ts5ZtTR46dlWqq-xK2ErUAfleahIbyPIWWLH_ZHKr_vBbWOzIaeVWleWgioo7FkK7ssc-Q-D_J0Jql3H4fuku4lJeEmCvZ57OLtYEgsB40Gq6vl_W7iaI11U3BcWJkphkk1FJyjHuZAsb1D8D06G4MMcO1ddLMv1O8-RiTbLDnBDfYP9N4g0-3LJrQh1dhthlh8-uQ1B2lkmsi-bO8bsbaiVM1nxVtdupH-dz3M-9xPe_QPm2kpzJKuAh889NlhcbBn-v1ZLXXu-drc_0gekDmL2PJiuEkRUADK_AIdcDawU1HEcTSnG-RODtPesmTqH6QY6sKk8PvYdM48pW5zoGl_8SZhva950dUCQxQGLPGi6fjDxIQ9tabi2OlNo0xBP573tDrnKb2pN-47uzK3G82-XLdE7A9SWZ7slT__WXy
+
+{
+  "title": "Prueba de documento atacante",
+  "content": "Codigo malicioso"
 }

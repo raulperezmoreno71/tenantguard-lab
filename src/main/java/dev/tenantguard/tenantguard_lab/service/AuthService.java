@@ -2,6 +2,7 @@ package dev.tenantguard.tenantguard_lab.service;
 
 import dev.tenantguard.tenantguard_lab.entity.User;
 import dev.tenantguard.tenantguard_lab.exception.InvalidCredentialsException;
+import dev.tenantguard.tenantguard_lab.exception.ResourceNotFoundException;
 import dev.tenantguard.tenantguard_lab.exception.UserAlreadyExistsException;
 import dev.tenantguard.tenantguard_lab.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,6 +44,6 @@ public class AuthService {
     }
 
     public User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found."));
     }
 }

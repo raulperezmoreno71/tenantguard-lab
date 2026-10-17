@@ -1,15 +1,16 @@
+
 ### Login
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
   "username": "testuser1",
-  "password": "password12345"
+  "password": "{{password}}"
 }
 
 ### Añadir miembro a la membership
 POST http://localhost:8080/api/organizations/2/members
-Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZW5hbnRndWFyZC1sYWIiLCJzdWIiOiIyIiwiZXhwIjoxNzkyMjQwNDcwLCJpYXQiOjE3OTIyMzY4NzB9.MAL_r9q84VYx3X74gWpmaeFm-BtaPO2I5izoQEqStgrfsmNkZzIFckeMBpqPhXEYkW5l5dZhsR_kq5wx7Weq4ZyFGWiTsdzFKhQBGsX9yO-g5_0FcWAZuzbqxaXMPj-Qrhr7-8_6I2hNat29CgYGiuOQmQ8PxfsNvX_GQCAMc9YXiUA_dCM5MyGCkGzapeqhaE3QgLayhiEX01E-LjlBRtUeuVTDVU0JjVGJpSHSmM0DFwttlpqHVd3YGB3EBgDu4yL-MGr1acIYfAwryK2VTlzhllH7zHuKmu8yLDwgaSVOqfZgPvO8NX_wjszF6F17rDU31E79wTqKQpmTpjzglCwoLKq4AgZep7QlBExn7o_m7AlIRBexzcquPKGVVNV9zSUQh0pz-6IhZ5mQ4tokoPQiqLGBrxRUyenW3HvcJMs9BSXlt0ChwP6T_etRr97SIv7e9YJz7g8Wt63Hui19ZkkeCRmwgz_OvgDRTlZNKoV2h42DaIkmBXP7g0fkqrR8
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -19,7 +20,7 @@ Content-Type: application/json
 
 ### Crear organizacion
 POST http://localhost:8080/api/organizations
-Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZW5hbnRndWFyZC1sYWIiLCJzdWIiOiIyIiwiZXhwIjoxNzkyMjQwNDcwLCJpYXQiOjE3OTIyMzY4NzB9.MAL_r9q84VYx3X74gWpmaeFm-BtaPO2I5izoQEqStgrfsmNkZzIFckeMBpqPhXEYkW5l5dZhsR_kq5wx7Weq4ZyFGWiTsdzFKhQBGsX9yO-g5_0FcWAZuzbqxaXMPj-Qrhr7-8_6I2hNat29CgYGiuOQmQ8PxfsNvX_GQCAMc9YXiUA_dCM5MyGCkGzapeqhaE3QgLayhiEX01E-LjlBRtUeuVTDVU0JjVGJpSHSmM0DFwttlpqHVd3YGB3EBgDu4yL-MGr1acIYfAwryK2VTlzhllH7zHuKmu8yLDwgaSVOqfZgPvO8NX_wjszF6F17rDU31E79wTqKQpmTpjzglCwoLKq4AgZep7QlBExn7o_m7AlIRBexzcquPKGVVNV9zSUQh0pz-6IhZ5mQ4tokoPQiqLGBrxRUyenW3HvcJMs9BSXlt0ChwP6T_etRr97SIv7e9YJz7g8Wt63Hui19ZkkeCRmwgz_OvgDRTlZNKoV2h42DaIkmBXP7g0fkqrR8
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -28,7 +29,7 @@ Content-Type: application/json
 
 ### Crear documento
 POST http://localhost:8080/api/organizations/2/documents
-Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZW5hbnRndWFyZC1sYWIiLCJzdWIiOiIyIiwiZXhwIjoxNzkyMjQwNDcwLCJpYXQiOjE3OTIyMzY4NzB9.MAL_r9q84VYx3X74gWpmaeFm-BtaPO2I5izoQEqStgrfsmNkZzIFckeMBpqPhXEYkW5l5dZhsR_kq5wx7Weq4ZyFGWiTsdzFKhQBGsX9yO-g5_0FcWAZuzbqxaXMPj-Qrhr7-8_6I2hNat29CgYGiuOQmQ8PxfsNvX_GQCAMc9YXiUA_dCM5MyGCkGzapeqhaE3QgLayhiEX01E-LjlBRtUeuVTDVU0JjVGJpSHSmM0DFwttlpqHVd3YGB3EBgDu4yL-MGr1acIYfAwryK2VTlzhllH7zHuKmu8yLDwgaSVOqfZgPvO8NX_wjszF6F17rDU31E79wTqKQpmTpjzglCwoLKq4AgZep7QlBExn7o_m7AlIRBexzcquPKGVVNV9zSUQh0pz-6IhZ5mQ4tokoPQiqLGBrxRUyenW3HvcJMs9BSXlt0ChwP6T_etRr97SIv7e9YJz7g8Wt63Hui19ZkkeCRmwgz_OvgDRTlZNKoV2h42DaIkmBXP7g0fkqrR8
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -36,13 +37,21 @@ Content-Type: application/json
   "content": "Este es un documento de prueba con contenido de prueba"
 }
 
+### Cosuntar documentos
+GET http://localhost:8080/api/organizations/2/documents
+Authorization: Bearer {{token}}
+
+### Consultar documento concreto
+GET http://localhost:8080/api/organizations/2/documents/1
+Authorization: Bearer {{token}}
+
 ### Registrar atacante
 POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
   "username": "attacker",
-  "password": "password12345"
+  "password": "{{password}}"
 }
 
 ### Login atacante
@@ -51,15 +60,77 @@ Content-Type: application/json
 
 {
   "username": "attacker",
-  "password": "password12345"
+  "password": "{{password}}"
 }
 
 ### Intento de atacante de crear documento de otra organizacion
 POST http://localhost:8080/api/organizations/2/documents
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZW5hbnRndWFyZC1sYWIiLCJzdWIiOiIzIiwiZXhwIjoxNzkyMjQxMDgwLCJpYXQiOjE3OTIyMzc0ODB9.evVvuoWaOwE-V0wWTQNnrv8QXkE00jWYklEcLiOPom_TwPlnHzYHHxp7xudGVer7HMYLWGaqlf68oTedqDp8S4Ts5ZtTR46dlWqq-xK2ErUAfleahIbyPIWWLH_ZHKr_vBbWOzIaeVWleWgioo7FkK7ssc-Q-D_J0Jql3H4fuku4lJeEmCvZ57OLtYEgsB40Gq6vl_W7iaI11U3BcWJkphkk1FJyjHuZAsb1D8D06G4MMcO1ddLMv1O8-RiTbLDnBDfYP9N4g0-3LJrQh1dhthlh8-uQ1B2lkmsi-bO8bsbaiVM1nxVtdupH-dz3M-9xPe_QPm2kpzJKuAh889NlhcbBn-v1ZLXXu-drc_0gekDmL2PJiuEkRUADK_AIdcDawU1HEcTSnG-RODtPesmTqH6QY6sKk8PvYdM48pW5zoGl_8SZhva950dUCQxQGLPGi6fjDxIQ9tabi2OlNo0xBP573tDrnKb2pN-47uzK3G82-XLdE7A9SWZ7slT__WXy
+Authorization: Bearer {{token}}
 
 {
   "title": "Prueba de documento atacante",
   "content": "Codigo malicioso"
 }
+
+### Atacante lee documento
+GET http://localhost:8080/api/organizations/2/documents
+Authorization: Bearer {{token}}
+
+
+### Registrar persona ajena
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "persona ajena",
+  "password": "{{password}}"
+}
+
+### Login persona ajena
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "persona ajena",
+  "password": "{{password}}"
+}
+
+### Persona ajena intenta acceder a documentos
+GET http://localhost:8080/api/organizations/2/documents
+Authorization: Bearer {{token}}
+
+### Persona ajena intenta acceder a un documento
+GET http://localhost:8080/api/organizations/2/documents/1
+Authorization: Bearer {{token}}
+
+### Actualizar documento (EDITOR o ADMIN)
+PUT http://localhost:8080/api/organizations/2/documents/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Título actualizado",
+  "content": "Contenido actualizado"
+}
+
+### Eliminar documento (EDITOR o ADMIN)
+DELETE http://localhost:8080/api/organizations/2/documents/1
+Authorization: Bearer {{token}}
+
+### Listar miembros (ADMIN)
+GET http://localhost:8080/api/organizations/2/members
+Authorization: Bearer {{token}}
+
+### Cambiar rol (ADMIN; memberId es el ID de la membresía)
+PUT http://localhost:8080/api/organizations/2/members/1/role
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "role": "EDITOR"
+}
+
+### Eliminar miembro (ADMIN)
+DELETE http://localhost:8080/api/organizations/2/members/1
+Authorization: Bearer {{token}}

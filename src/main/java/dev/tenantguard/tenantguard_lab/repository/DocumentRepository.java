@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     List<Document> findByOrganization_Id (Long organizationId);
+    Optional<Document> findByOrganization_IdAndId(Long organizationId, Long documentId);
 }

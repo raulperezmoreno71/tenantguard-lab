@@ -8,7 +8,8 @@ The API uses Spring Security with RSA-signed JWTs, Spring Data JPA, PostgreSQL 1
 
 | Lab | Topic | Case study | Exercise branch |
 | --- | --- | --- | --- |
-| 01 | Cross-tenant Broken Object Level Authorization (BOLA / IDOR) | [Read the case study](docs/labs/01-cross-tenant-bola/README.md) | `lab/bola` |
+| 01 | Cross-tenant Broken Object Level Authorization (BOLA / IDOR) | [Read the case study](docs/labs/01-cross-tenant-bola/README.md) | [`lab/bola`](https://github.com/raulperezmoreno71/tenantguard-lab/tree/lab/bola) |
+| 02 | Broken Function Level Authorization (BFLA): vertical privilege escalation | [Read the case study](docs/labs/02-vertical-privilege-escalation/README.md) | [`lab/bfla`](https://github.com/raulperezmoreno71/tenantguard-lab/tree/lab/bfla) |
 
 `main` is the secure reference implementation and contains the documentation and regression tests. Each `lab/...` branch is a separate, intentionally vulnerable exercise; **never merge a vulnerable branch into `main`**. Vulnerable branches are for isolated local education only—do not deploy them publicly or use real data or credentials.
 

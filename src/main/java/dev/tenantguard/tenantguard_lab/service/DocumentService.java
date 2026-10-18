@@ -53,7 +53,7 @@ public class DocumentService {
     public Document getDocumentById(Long organizationId, Long documentId, Long userId) {
         membershipService.requireRole(userId, organizationId, Role.VIEWER);
 
-        return documentRepository.findByOrganization_IdAndId(organizationId, documentId)
+        return documentRepository.findById(documentId)
                 .orElseThrow(DocumentNotFoundException::new);
     }
 

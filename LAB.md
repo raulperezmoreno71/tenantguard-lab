@@ -1,35 +1,35 @@
-# Entornos de TenantGuard Lab
+# TenantGuard Lab environments
 
-Los dos archivos Compose usan proyectos distintos. `compose.yaml` conserva PostgreSQL de desarrollo en `127.0.0.1:5433` y su volumen actual. `compose.lab.yaml` crea contenedores, red y volumen propios; su PostgreSQL solo escucha en la red interna y la API se publica en `127.0.0.1:8080`.
+The two Compose files use separate projects. `compose.yaml` keeps the existing development PostgreSQL database and volume and exposes it on `127.0.0.1:5433`. `compose.lab.yaml` creates separate containers, a network, and a volume; its PostgreSQL service is available only on the internal network, while the API is bound to `127.0.0.1:8080`.
 
-Antes de arrancar, conserva un archivo `.env` local (ignorado por Git) con `DB_NAME`, `DB_USER` y `DB_PASSWORD`, y los archivos `keys/private.pem` y `keys/public.pem` (también ignorados). Ambos modos pueden usar las mismas variables, pero no comparten datos. Los archivos de claves se montan por separado y en modo de solo lectura; deben ser legibles para el UID 10001 del contenedor de la API.
+Before starting either mode, keep a local `.env` file (ignored by Git) with `DB_NAME`, `DB_USER`, and `DB_PASSWORD`, plus `keys/private.pem` and `keys/public.pem` (also ignored). The two modes may use the same variable names, but they do not share database data. The key files are mounted read-only and must be readable by the API container's UID 10001.
 
-## Desarrollo: IntelliJ + PostgreSQL en Docker
+## Development: IntelliJ + PostgreSQL in Docker
 
 ```powershell
 docker compose -f compose.yaml up -d db
 ```
 
-Ejecuta Spring Boot desde IntelliJ con las variables de `.env`; la configuración actual conecta con `localhost:5433`. Para detener este modo, detén la aplicación en IntelliJ y luego ejecuta:
+Run Spring Boot from IntelliJ with the variables from `.env`; the current configuration connects to `localhost:5433`. IntelliJ does not automatically import the Compose `.env` file into its run configuration. To stop this mode, stop the application in IntelliJ and then run:
 
 ```powershell
 docker compose -f compose.yaml stop db
 ```
 
-## Laboratorio: API + PostgreSQL en Docker
+## Laboratory: API + PostgreSQL in Docker
 
-Si Spring Boot sigue usando el puerto 8080 desde IntelliJ, detén solo esa ejecución antes de arrancar el laboratorio.
+If an IntelliJ-run Spring Boot instance is still using port 8080, stop only that instance before starting the lab.
 
-Copia `.env.lab.example` a `.env.lab` y asigna una contraseña local distinta a cada `LAB_PASSWORD_ALICE`, `LAB_PASSWORD_BOB`, `LAB_PASSWORD_CHARLIE`, `LAB_PASSWORD_DAVID` y `LAB_PASSWORD_EVE` (12 a 72 caracteres). `.env.lab` está ignorado por Git. No uses contraseñas reales. Las contraseñas solo se aplican cuando las tablas de dominio del laboratorio están vacías; cambiar variables después no modifica usuarios existentes.
+Copy `.env.lab.example` to `.env.lab` and choose a different local demonstration password for each of `LAB_PASSWORD_ALICE`, `LAB_PASSWORD_BOB`, `LAB_PASSWORD_CHARLIE`, `LAB_PASSWORD_DAVID`, and `LAB_PASSWORD_EVE` (12–72 characters). `.env.lab` is ignored by Git. Do not use real passwords. These passwords take effect only when the lab's domain tables are empty; changing the variables later does not change existing users.
 
 ```powershell
 docker compose --env-file .env --env-file .env.lab -f compose.lab.yaml up -d --build
 docker compose --env-file .env --env-file .env.lab -f compose.lab.yaml ps
 ```
 
-La API usa `jdbc:postgresql://db:5432/<DB_NAME>` dentro de la red del laboratorio. `depends_on` espera a que el healthcheck de PostgreSQL esté preparado; Spring Boot ejecuta Flyway y luego la inicialización del perfil `lab`. Si ya existe cualquier usuario, organización, membresía o documento, la inicialización se omite completa y no modifica esos datos.
+Within the lab network, the API uses `jdbc:postgresql://db:5432/<DB_NAME>`. `depends_on` waits for the PostgreSQL healthcheck; Spring Boot then runs Flyway and the `lab`-profile initializer. If any user, organization, membership, or document already exists, initialization is skipped entirely and existing data is not changed.
 
-| Usuario | Organización | Rol |
+| User | Organization | Role |
 | --- | --- | --- |
 | alice | Acme Corp | ADMIN |
 | bob | Acme Corp | EDITOR |
@@ -37,35 +37,35 @@ La API usa `jdbc:postgresql://db:5432/<DB_NAME>` dentro de la red del laboratori
 | david | Globex Corp | ADMIN |
 | eve | Globex Corp | VIEWER |
 
-Acme contiene los documentos `ACME-001` a `ACME-003`; Globex contiene `GLOBEX-001` a `GLOBEX-003`. Sus títulos y contenidos identifican claramente la organización. La API no expone las contraseñas. Para obtener un JWT, usa el endpoint de login con la contraseña local del usuario correspondiente, por ejemplo:
+Acme contains documents `ACME-001` through `ACME-003`; Globex contains `GLOBEX-001` through `GLOBEX-003`. Their titles and contents identify the owning organization. The API does not expose passwords. To obtain a JWT, call the login endpoint with that user's local password, for example:
 
 ```powershell
-$password = Read-Host -AsSecureString 'Contraseña local de alice'
+$password = Read-Host -AsSecureString 'Local password for alice'
 $plainPassword = [System.Net.NetworkCredential]::new('', $password).Password
 $body = @{ username = 'alice'; password = $plainPassword } | ConvertTo-Json
 $token = (Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:8080/api/auth/login' -ContentType 'application/json' -Body $body).accessToken
 Remove-Variable plainPassword, body
 ```
 
-Usa `$token` como `Authorization: Bearer <token>` en Burp Suite. Repite el login para cada usuario; no guardes tokens en Git.
+Use `$token` as `Authorization: Bearer <token>` in Burp Suite. Log in separately for each user; do not store tokens in Git.
 
-Para detener el laboratorio sin eliminar el volumen:
+To stop the lab without deleting its volume:
 
 ```powershell
 docker compose --env-file .env --env-file .env.lab -f compose.lab.yaml stop
 ```
 
-## Restaurar solo el escenario de laboratorio
+## Reset only the laboratory scenario
 
-Primero comprueba el proyecto, el perfil, las etiquetas del volumen y el volumen de desarrollo sin cambiar nada:
+First, inspect the project, profile, volume labels, and development volume without changing anything:
 
 ```powershell
 ./scripts/Reset-Lab.ps1 -CheckOnly
 ```
 
-Después ejecuta `./scripts/Reset-Lab.ps1`. El script exige escribir exactamente `RESET tenantguard-lab-lab_lab_postgres_data` antes de detener los contenedores del laboratorio y eliminar únicamente ese volumen. A continuación vuelve a construir y arrancar el laboratorio, que aplica Flyway y recrea los datos ficticios. El volumen de desarrollo `tenantguard-lab_postgres_data` no es objetivo del script. Esta operación elimina los cambios que hayas hecho en los datos del laboratorio.
+Then run `./scripts/Reset-Lab.ps1`. The script requires you to type exactly `RESET tenantguard-lab-lab_lab_postgres_data` before stopping the lab containers and deleting only that volume. It then rebuilds and starts the lab, where Flyway and the initializer recreate the fictitious scenario. The development volume, `tenantguard-lab_postgres_data`, is not a target of this script. This operation deletes any changes you made to the lab data.
 
-Para comprobar que desarrollo sigue intacto, consulta sus contenedores y el volumen por separado:
+To confirm that development remains intact, inspect its containers and volume separately:
 
 ```powershell
 docker compose -f compose.yaml ps

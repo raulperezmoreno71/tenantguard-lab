@@ -86,7 +86,7 @@ public class MembershipService {
             throw new IllegalArgumentException("Role must not be null.");
         }
         lockOrganization(organizationId);
-        requireRole(adminId, organizationId, Role.ADMIN);
+        requireRole(adminId, organizationId, Role.VIEWER);
         Membership member = findMember(organizationId, memberId);
         ensureAdministratorRemains(organizationId, member, role);
         member.setRole(role);

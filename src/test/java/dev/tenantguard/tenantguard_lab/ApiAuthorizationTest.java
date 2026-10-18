@@ -93,6 +93,39 @@ class ApiAuthorizationTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    void viewerCannotPromoteThemselvesToAdmin() throws Exception {
+        User admin = users.save(new User("api-admin-bfla", "hash"));
+        User viewer = users.save(new User("api-viewer-bfla", "hash"));
+
+        Organization organization = organizations.save(
+                new Organization("API BFLA Test")
+        );
+
+        memberships.save(new Membership(admin, organization, Role.ADMIN));
+
+        Membership viewerMember = memberships.save(
+                new Membership(viewer, organization, Role.VIEWER)
+        );
+
+        String url = "/api/organizations/" + organization.getId()
+                + "/members/" + viewerMember.getId() + "/role";
+
+        mvc.perform(put(url)
+                        .with(token(viewer))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"role\":\"ADMIN\"}"))
+                .andExpect(status().isForbidden());
+
+        Membership updatedMember = memberships.findById(viewerMember.getId())
+                .orElseThrow();
+
+        org.junit.jupiter.api.Assertions.assertEquals(
+                Role.VIEWER,
+                updatedMember.getRole()
+        );
+    }
+
     private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token(User user) {
         return SecurityMockMvcRequestPostProcessors.jwt().jwt(jwt -> jwt.subject(user.getId().toString()));
     }

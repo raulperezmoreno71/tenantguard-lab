@@ -1,6 +1,6 @@
 # TenantGuard Lab
 
-TenantGuard Lab is a Java 21 / Spring Boot REST API for studying authorization in a multi-tenant system. Users belong to organizations through memberships with `ADMIN`, `EDITOR`, or `VIEWER` roles; documents belong to one organization. The project is an evolving AppSec portfolio, not a production service.
+TenantGuard Lab is a Java 21 / Spring Boot REST API that I developed from scratch for studying authorization in a multi-tenant system. Users belong to organizations through memberships with `ADMIN`, `EDITOR`, or `VIEWER` roles; documents belong to one organization. The project is an evolving AppSec portfolio, not a production service.
 
 The API uses Spring Security with RSA-signed JWTs, Spring Data JPA, PostgreSQL 17, Flyway, Maven, and Docker Compose. JUnit and MockMvc cover authorization behavior; Kali Linux and Burp Suite were used for the manual lab exercise.
 
